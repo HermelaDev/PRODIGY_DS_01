@@ -8,6 +8,7 @@ output: html_document
 # Loading libraries
 library(tidyverse)
 library(reshape2)
+library(scales) 
 
 
 # Read the csv file
@@ -52,6 +53,7 @@ melted_top_5 <- melt(top_5_counties, id.vars = "County",
 ggplot(melted_top_5, aes(x = County, y = value, fill = variable)) +
   geom_bar(stat = "identity") +
   scale_fill_manual(values = c("Male" = "blue", "Female" = "yellow", "Intersex" = "purple")) +
+  scale_y_continuous(labels = comma) +
   labs(title = "Population Distribution in Top 5 Most Populous Kenyan Counties (2019)",
        x = "County", y = "Population",
        fill = "Gender") +
@@ -59,4 +61,22 @@ ggplot(melted_top_5, aes(x = County, y = value, fill = variable)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
+# Identifying the 5 counties with the smallest total population
+bottom_5_counties <- kenya_popu %>%
+  arrange(Total) %>%  # Ascending order to get the least populous
+  head(5)
 
+# Melt the dataset for easier plotting (long format)
+melted_bottom_5 <- melt(bottom_5_counties, id.vars = "County", 
+                        measure.vars = c("Male", "Female", "Intersex"))
+
+# Creating a stacked bar chart for the 5 least populous counties
+ggplot(melted_bottom_5, aes(x = County, y = value, fill = variable)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("Male" = "gold", "Female" = "red", "Intersex" = "purple")) +
+  labs(title = "Population Distribution in the 5 Least Populous Kenyan Counties (2019)",
+       x = "County", y = "Population",
+       fill = "Gender") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::comma)
