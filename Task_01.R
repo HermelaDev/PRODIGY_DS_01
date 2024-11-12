@@ -5,7 +5,10 @@ date: "2024-11-12"
 output: html_document
 ---
   
+# Loading libraries
 library(tidyverse)
+library(reshape2)
+
 
 # Read the csv file
 kenya_pop <- read_csv("kenya-population-distibution-2019-census.csv")
@@ -14,26 +17,25 @@ kenya_popu <- kenya_pop[-1, ]
 # Viewing the first rows 
 head(kenya_popu)
 
+
 # Checking the structure of the dataset
 glimpse(kenya_popu)
 
 
-library(reshape2)
-
-# Melt the dataset for plotting
+# Melting the dataset for plotting
 melted_data <- melt(kenya_popu, id.vars = "County", measure.vars = c("Male", "Female", "Intersex"))
 
-# Create a grouped bar chart
+# Creating a grouped bar chart
 ggplot(melted_data, aes(x = County, y = value, fill = variable)) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.7) +  # Adjusted bar width
-  scale_fill_manual(values = c("Male" = "blue", "Female" = "pink", "Intersex" = "purple")) +  # Softer color scheme
-  labs(title = "Gender-wise Population Distribution in Kenyan Counties (2019)",
+  geom_bar(stat = "identity", position = "dodge", width = 1) +  
+  scale_fill_manual(values = c("Male" = "blue", "Female" = "yellow", "Intersex" = "purple")) +  
+  labs(title = "Gender-wise Population Distribution in Kenyan Counties (Census 2019)",
        x = "County", y = "Population",
        fill = "Gender") +
-  theme_minimal(base_size = 14) +  # Improved font size and theme
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),  # Adjusted angle for x-axis labels
-        axis.title = element_text(size = 12),  # Increased axis title size
-        legend.position = "top")  # Moved the legend to the top
+  theme_minimal(base_size = 14) +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),  
+        axis.title = element_text(size = 12),  
+        legend.position = "top") 
 
 
 
@@ -47,7 +49,7 @@ melted_top_5 <- melt(top_5_counties, id.vars = "County",
                      measure.vars = c("Male", "Female", "Intersex"))
 
 # Create a stacked bar chart for the top 5 counties
-ggplot(melted_top_5, aes(x = reorder(County, -value), y = value, fill = variable)) +
+ggplot(melted_top_5, aes(x = County, y = value, fill = variable)) +
   geom_bar(stat = "identity") +
   scale_fill_manual(values = c("Male" = "blue", "Female" = "yellow", "Intersex" = "purple")) +
   labs(title = "Population Distribution in Top 5 Most Populous Kenyan Counties (2019)",
@@ -55,5 +57,6 @@ ggplot(melted_top_5, aes(x = reorder(County, -value), y = value, fill = variable
        fill = "Gender") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 
