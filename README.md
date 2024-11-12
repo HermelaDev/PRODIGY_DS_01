@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="IMG-20240111-WA0007.jpg" alt="Alt text" width="300"/>
+</p>
+
 # Kenya Population Distribution Analysis (2019 Census)
 
 This project visualizes the gender-wise population distribution across Kenyan counties based on the 2019 Census data. The analysis uses R and the ggplot2 package to generate insightful visualizations for understanding demographic patterns.
